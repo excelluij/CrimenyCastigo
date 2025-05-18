@@ -22,7 +22,13 @@
             color: #2e1b0f;
             margin-bottom: 20px;
         }
-        .index-container a {
+        .index-container p {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #3c2f2f;
+            margin-bottom: 20px;
+        }
+        .nav-item.nav-link {
             display: inline-block;
             font-family: 'Courier New', monospace;
             font-size: 1.2em;
@@ -35,7 +41,7 @@
             transform: rotate(1deg);
             box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
         }
-        .index-container a:hover {
+        .nav-item.nav-link:hover {
             background: #6f5738;
         }
     </style>
@@ -44,9 +50,8 @@
     <div class="index-container">
         <h1>Diario de Raskólnikov</h1>
         <p>Fragmentos del diario de Rodión Raskólnikov, inspirado en <em>Crimen y Castigo</em> de Fiódor Dostoevski.</p>
-        <a href="parts/part1.html">Parte I</a>
-        <a href="parts/part2.html">Parte II</a>
+        <a href="parts/part1.html" class="nav-item nav-link" id="part1-link">Parte I</a>
+        <a href="parts/part2.html" class="nav-item nav-link" id="part2-link">Parte II</a>
     </div>
 </body>
 </html>
-```
