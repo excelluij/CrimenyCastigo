@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diario de Raskólnikov - Fragmentos (Parte III)</title>
+    <style>
+        /* General Reset and Print Setup */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #e8d8b8;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Letter-Sized Container */
+        .diario-contenedor {
+            width: 816px; /* 8.5in at 96dpi */
+            min-height: 1056px; /* 11in at 96dpi */
+            margin: 20px auto;
+            background: url('https://www.transparenttextures.com/patterns/old-paper.png') repeat, #f5e8c7;
+            padding: 30px;
+            border: 2px solid #3c2f2f;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.3), inset 0 0 10px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        /* Chaotic Page Styling */
+        .pagina {
+            display: none;
+            padding: 20px;
+            background: rgba(255,255,255,0.7);
+            border: 1px dashed #4a3728;
+            transform: rotate(0.5deg);
+            margin-bottom: 20px;
+        }
+
+        .pagina.activa {
+            display: block;
+        }
+
+        .pagina h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 1.8em;
+            color: #2e1b0f;
+            border-bottom: 2px dashed #4a3728;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            transform: rotate(-1deg);
+        }
+
+        .pagina p {
+            font-size: 1em;
+            color: #3c2f2f;
+            margin: 10px 0;
+        }
+
+        .pagina blockquote {
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            font-size: 0.95em;
+            color: #5a4636;
+            margin: 15px 20px;
+            padding: 10px 15px;
+            border-left: 4px solid #8b6f47;
+            background: rgba(255,245,204,0.5);
+            transform: rotate(1deg);
+        }
+
+        .anotacion {
+            font-family: 'Caveat', cursive;
+            font-size: 0.85em;
+            color: #2e1b0f;
+            margin: 15px 10px;
+            padding: 10px;
+            background: rgba(255,245,204,0.8);
+            border: 1px dashed #8b6f47;
+            transform: rotate(3deg);
+            box-shadow: 3px 3px 5px rgba(0,0,0,0.2);
+        }
+
+        .ilustracion {
+            width: 100%;
+            max-height: 150px;
+            object-fit: cover;
+            border: 2px dashed #4a3728;
+            margin: 20px 0;
+            transform: rotate(-2deg);
+            box-shadow: 3px 3px 5px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .ilustracion::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 20px;
+            height: 20px;
+            background: url('https://www.transparenttextures.com/patterns/stains.png');
+            opacity: 0.3;
+        }
+
+        .navegacion {
+            text-align: center;
+            margin-top: 20px;
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+        }
+
+        .navegacion button {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            padding: 8px 15px;
+            margin: 0 10px;
+            background: #8b6f47;
+            color: #fff;
+            border: 1px solid #4a3728;
+            cursor: pointer;
+            transform: rotate(1deg);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .navegacion button:hover {
+            background: #6f5738;
+        }
+
+        .cita {
+            font-style: italic;
+            color: #5a4636;
+        }
+
+        h3 {
+            font-family: 'Caveat', cursive;
+            font-size: 1.4em;
+            color: #2e1b0f;
+            margin: 15px 0;
+        }
+
+        ul {
+            margin: 10px 20px;
+            list-style-type: none;
+        }
+
+        ul li {
+            font-size: 0.95em;
+            color: #3c2f2f;
+            margin: 5px 0;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #8b6f47;
+        }
+
+        /* Ink Splatters for Chaos */
+        .diario-contenedor::before,
+        .diario-contenedor::after {
+            content: '';
+            position: absolute;
+            background: url('https://www.transparenttextures.com/patterns/stains.png');
+            opacity: 0.2;
+        }
+
+        .diario-contenedor::before {
+            width: 50px;
+            height: 50px;
+            top: 20px;
+            left: 20px;
+        }
+
+        .diario-contenedor::after {
+            width: 30px;
+            height: 30px;
+            bottom: 30px;
+            right: 30px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                margin: 0;
+                background: none;
+            }
+
+            .diario-contenedor {
+                width: 8.5in;
+                min-height: 11in;
+                margin: 0;
+                box-shadow: none;
+                border: none;
+                page-break-after: always;
+            }
+
+            .pagina {
+                transform: none;
+                margin: 0;
+                padding: 20px;
+                background: none;
+                border: none;
+            }
+
+            .pagina.activa {
+                display: block;
+            }
+
+            .pagina:not(.activa) {
+                display: none;
+            }
+
+            .navegacion {
+                display: none;
+            }
+
+            .ilustracion,
+            .anotacion,
+            .pagina h2,
+            .pagina blockquote {
+                transform: none;
+            }
+
+            .ilustracion {
+                max-width: 100%;
+                height: auto;
+                max-height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="diario-contenedor">
+    <!-- Página 1: La Visita de la Familia -->
+    <section id="pagina1" class="pagina activa">
+        <h2>Entrada [Principios de julio, después de la visita] - La Visita de la Familia</h2>
+        <p>Mamá y Dunia llegaron. Sus rostros llenos de esperanza, pero también de miedo. Hablaron de Lujine, de su sacrificio por mí. Me desmayé cuando Dunia dijo que no era culpable de la muerte de nadie. ¿Me ven a través de mí? Confesé que di dinero a los Marmeladov. ¿Por qué? ¿Redención o arrogancia?</p>
+        <blockquote>"¡Claro, todos estos malos actos nunca pueden ser borrados ni suavizados... y así es inútil siquiera pensarlo, debo ir a ellos en silencio y cumplir con mi deber... en silencio también... y no pedir perdón, ni decir nada... ¡ahora todo está perdido!"</blockquote>
+        <blockquote>"¿Por qué exiges que tenga un heroísmo que tal vez tú tampoco tienes?"</blockquote>
+        <div class="anotacion">
+            <p>¿Me siento justificado? Dar el dinero fue expiación, pero ¿lo merezco?</p>
+            <p>¿Qué me atormenta? Su sacrificio por mí. La idea de que mi acto las haya condenado.</p>
+            <p>¿Qué miedos no puedo nombrar? El miedo a que descubran mi verdad.</p>
+        </div>
+        <img src="../assets/images/family_visit.jpg" alt="Raskólnikov sentado, con la cabeza entre las manos, mientras su madre y hermana lo miran con preocupación, con Lujine borroso en el fondo." class="ilustracion">
+        <h3>Observaciones sobre otros:</h3>
+        <ul>
+            <li>Mamá: Amor incondicional, ciega a mi tormento.</li>
+            <li>Dunia: Fuerte, sacrificada, su fe en mí me asfixia.</li>
+            <li>Razumikhin: Leal, atraído por Dunia, un contraste con mi oscuridad.</li>
+        </ul>
+        <div class="navegacion">
+            <button onclick="cambiarPagina(1)">Siguiente Página</button>
+        </div>
+    </section>
+
+    <!-- Página 2: La Confesión a Sonya -->
+    <section id="pagina2" class="pagina">
+        <h2>Entrada [Principios de julio, tarde] - La Confesión a Sonya</h2>
+        <p>Fui a ver a Sonya. Le conté mi teoría, los hombres extraordinarios. Sus ojos, su silencio... mi teoría se deshizo. Habló de fe, de redención. Me dejó vulnerable, perdido. ¿Es ella mi salvación?</p>
+        <blockquote>"Todas estas preguntas sobre el crimen, el entorno, los niños, me recuerdan un artículo tuyo que me interesó en su momento. ‘Sobre el crimen’... o algo por el estilo, no recuerdo el título, lo leí con placer hace dos meses en la Revista Periódica."</blockquote>
+        <div class="anotacion">
+            <p>¿Me siento justificado? Mi teoría parece vacía ante su pureza.</p>
+            <p>¿Qué me atormenta? Su fe, que me hace dudar de mi mente.</p>
+            <p>¿Qué miedos no puedo nombrar? El miedo a que me redima y pierda lo que soy.</p>
+        </div>
+        <img src="../assets/images/sonya_confession.jpg" alt="Raskolnikov y Sonya en una habitación pobre, él hablando intensamente, ella escuchándolo con atención." class="ilustracion">
+        <h3>Observaciones sobre otros:</h3>
+        <ul>
+            <li>Sonya: Pureza y fe, un espejo de mi miseria.</li>
+            <li>Los Marmeladov: Miseria que depende de ella, me hace sentir culpable.</li>
+        </ul>
+        <div class="navegacion">
+            <button onclick="cambiarPagina(0)">Página Anterior</button>
+            <button onclick="cambiarPagina(2)">Siguiente Página</button>
+        </div>
+    </section>
+
+    <!-- Página 3: El Interrogatorio con Porfiry -->
+    <section id="pagina3" class="pagina">
+        <h2>Entrada [Principios de julio, mañana] - El Interrogatorio con Porfiry</h2>
+        <p>Porfiry me citó. Cada palabra, una trampa. Habló de mi artículo, de los pintores. Negué todo, pero mi corazón latía con fuerza. Me siento atrapado, como un ratón en su juego.</p>
+        <blockquote>"Porque solo los campesinos, o los novatos más inexpertos, niegan todo de plano en los interrogatorios."</blockquote>
+        <div class="anotacion">
+            <p>¿Me siento justificado? Mi teoría no resiste su astucia.</p>
+            <p>¿Qué me atormenta? Su mirada, que parece ver mi alma.</p>
+            <p>¿Qué miedos no puedo nombrar? El miedo a que mi culpa me delate.</p>
+        </div>
+        <img src="../assets/images/porfiry_interrogation.jpg" alt="Caricatura de Porfiry detrás de un escritorio, sonriendo astutamente, con Raskolnikov tenso frente a él." class="ilustracion">
+        <h3>Observaciones sobre otros:</h3>
+        <ul>
+            <li>Porfiry: Inteligente, un juez implacable.</li>
+            <li>Razumikhin: Leal, pero ciego a la tensión.</li>
+        </ul>
+        <div class="navegacion">
+            <button onclick="cambiarPagina(1)">Página Anterior</button>
+            <button onclick="cambiarPagina(3)">Siguiente Página</button>
+        </div>
+    </section>
+
+    <!-- Página 4: El Extraño y la Pesadilla -->
+    <section id="pagina4" class="pagina">
+        <h2>Entrada [Principios de julio, noche] - El Extraño y la Pesadilla</h2>
+        <p>Un extraño me llamó "asesino" en la calle. Mi corazón se detuvo. Luego, la pesadilla: Alyona riéndose, el hacha inútil. Desperté y Svidrigailov estaba allí, mirándome.</p>
+        <div class="anotacion">
+            <p>¿Me siento justificado? Mi acto fue en vano, un sueño roto.</p>
+            <p>¿Qué me atormenta? La risa de Alyona, el peso de su mirada.</p>
+            <p>¿Qué miedos no puedo nombrar? El miedo a la locura que me consume.</p>
+        </div>
+        <img src="../assets/images/nightmare.jpg" alt="Imagen onírica de Alyona riendo, Raskolnikov con el hacha, y Svidrigailov observando desde las sombras." class="ilustracion">
+        <h3>Observaciones sobre otros:</h3>
+        <ul>
+            <li>El extraño: Una voz que resuena en mi culpa.</li>
+            <li>Svidrigailov: Una sombra que me acecha.</li>
+        </ul>
+        <div class="navegacion">
+            <button onclick="cambiarPagina(2)">Página Anterior</button>
+            <button onclick="cambiarPagina(4)">Siguiente Página</button>
+        </div>
+    </section>
+
+    <!-- Página 5: La Presencia de Svidrigailov -->
+    <section id="pagina5" class="pagina">
+        <h2>Entrada [Principios de julio, tarde siguiente] - La Presencia de Svidrigailov</h2>
+        <p>Svidrigailov apareció en mi habitación. Su sonrisa, su calma... sabe algo. Habla de Dunia, me amenaza. Lo odio, pero su presencia me paraliza.</p>
+        <div class="anotacion">
+            <p>¿Me siento justificado? Su corrupción me repugna, pero ¿soy mejor?</p>
+            <p>¿Qué me atormenta? Su conocimiento, su amenaza a Dunia.</p>
+            <p>¿Qué miedos no puedo nombrar? El miedo a ser destruido por él.</p>
+        </div>
+        <img src="../assets/images/svidrigailov_presence.jpg" alt="Svidrigailov sentado cómodamente, sonriendo enigmáticamente, con Raskolnikov tenso y desconfiado." class="ilustracion">
+        <h3>Observaciones sobre otros:</h3>
+        <ul>
+            <li>Svidrigailov: Peligroso, un espejo de mi oscuridad.</li>
+            <li>Dunia: Inocencia que debo proteger.</li>
+        </ul>
+        <div class="navegacion">
+            <button onclick="cambiarPagina(3)">Página Anterior</button>
+            <button onclick="cambiarPagina(5)">Siguiente Página</button>
+        </div>
+    </section>
+
+    <!-- Página 6: La Dependencia de Sonya -->
+    <section id="pagina6" class="pagina">
+        <h2>Entrada [Principios de julio, reflexión] - La Dependencia de Sonya</h2>
+        <p>Sonya se ha convertido en mi refugio. Su fe me atrae, pero me siento indigno. ¿Puedo redimirme a través de ella? Mi orgullo se resquebraja.</p>
+        <div class="anotacion">
+            <p>¿Me siento justificado? Su bondad podría salvarme, pero ¿a qué costo?</p>
+            <p>¿Qué me atormenta? Mi dependencia, mi pérdida de control.</p>
+            <p>¿Qué miedos no puedo nombrar? El miedo a perder mi identidad.</p>
+        </div>
+        <img src="../assets/images/sonya_dependence.jpg" alt="Raskolnikov y Sonya caminando juntos por una calle oscura, con una luz tenue iluminando sus rostros." class="ilustracion">
+        <h3>Observaciones sobre otros:</h3>
+        <ul>
+            <li>Sonya: Fuerza en su fragilidad.</li>
+            <li>Los Marmeladov: Un recordatorio de mi culpa.</li>
+        </ul>
+        <div class="navegacion">
+            <button onclick="cambiarPagina(4)">Página Anterior</button>
+            <button onclick="cambiarPagina(6)">Siguiente Página</button>
+        </div>
+    </section>
+
+    <!-- Página 7: La Decisión de Confesar -->
+    <section id="pagina7" class="pagina">
+        <h2>Entrada [Principios de julio, noche] - La Decisión de Confesar</h2>
+        <p>La culpa me consume. Sonya dice que confiese, pero mi orgullo me detiene. ¿Puedo enfrentar mi alma? La pluma tiembla en mi mano.</p>
+        <div class="anotacion">
+            <p>¿Me siento justificado? Mi teoría era una mentira, ¿y ahora qué?</p>
+            <p>¿Qué me atormenta? La incertidumbre, la presión de todos.</p>
+            <p>¿Qué miedos no puedo nombrar? El miedo a lo que queda después.</p>
+        </div>
+        <img src="../assets/images/confession_decision.jpg" alt="Raskolnikov sentado en su habitación, con una pluma en la mano, mirando un papel en blanco." class="ilustracion">
+        <h3>Observaciones sobre otros:</h3>
+        <ul>
+            <li>Sonya: Mi última esperanza.</li>
+            <li>Porfiry: La sombra que me persigue.</li>
+        </ul>
+        <div class="navegacion">
+            <button onclick="cambiarPagina(5)">Página Anterior</button>
+            <button onclick="cambiarPagina(7)">Siguiente Página</button>
+        </div>
+    </section>
+
+    <!-- Sección para el Perfil Psicológico final -->
+    <section id="perfil" class="pagina">
+        <h2>Perfil Psicológico de Raskólnikov (Parte III)</h2>
+        <p>La culpa y el miedo dominan mi mente. Mi teoría ha colapsado, y Sonya se alza como mi posible redención. Porfiry y Svidrigailov me empujan al borde, acercándome a confesar.</p>
+        <div class="anotacion">
+            Preguntas guía para esta sección:
+            <ul>
+                <li>¿Cómo ha evolucionado mi relación con Sonya?</li>
+                <li>¿Qué papel juega Porfiry en mi tormento?</li>
+                <li>¿Estoy más cerca de confesar mi crimen?</li>
+                <li>¿Cómo afecta Svidrigailov mi estado mental?</li>
+                <li>¿Hay indicios de redención o desesperación?</li>
+            </ul>
+        </div>
+        <img src="../assets/images/mind_diagram.jpg" alt="Diagrama de su mente, mostrando conflictos internos como culpa, orgullo y dependencia." class="ilustracion">
+        <div class="navegacion">
+            <button onclick="cambiarPagina(6)">Página Anterior</button>
+        </div>
+    </section>
+</div>
+
+<script>
+    const paginas = document.querySelectorAll('.pagina');
+    let paginaActual = 0;
+
+    function mostrarPagina(indice) {
+        paginas.forEach((pagina, i) => {
+            pagina.classList.toggle('activa', i === indice);
+        });
+        window.scrollTo(0, 0);
+    }
+
+    function cambiarPagina(direccion) {
+        paginaActual = direccion;
+        mostrarPagina(paginaActual);
+    }
+
+    mostrarPagina(paginaActual);
+</script>
+</body>
+</html>
