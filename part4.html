@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diario de Raskólnikov - Fragmentos (Parte IV)</title>
+    <style>
+        /* General Reset and Print Setup */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #e8d8b8;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Letter-Sized Container */
+        .diario-contenedor {
+            width: 816px; /* 8.5in at 96dpi */
+            min-height: 1056px; /* 11in at 96dpi */
+            margin: 20px auto;
+            background: url('https://www.transparenttextures.com/patterns/old-paper.png') repeat, #f5e8c7;
+            padding: 30px;
+            border: 2px solid #3c2f2f;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.3), inset 0 0 10px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        /* Chaotic Page Styling */
+        .pagina {
+            display: none;
+            padding: 20px;
+            background: rgba(255,255,255,0.7);
+            border: 1px dashed #4a3728;
+            transform: rotate(0.5deg);
+            margin-bottom: 20px;
+        }
+
+        .pagina.activa {
+            display: block;
+        }
+
+        .pagina h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 1.8em;
+            color: #2e1b0f;
+            border-bottom: 2px dashed #4a3728;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            transform: rotate(-1deg);
+        }
+
+        .pagina p {
+            font-size: 1em;
+            color: #3c2f2f;
+            margin: 10px 0;
+        }
+
+        .pagina blockquote {
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            font-size: 0.95em;
+            color: #5a4636;
+            margin: 15px 20px;
+            padding: 10px 15px;
+            border-left: 4px solid #8b6f47;
+            background: rgba(255,245,204,0.5);
+            transform: rotate(1deg);
+        }
+
+        .anotacion {
+            font-family: 'Caveat', cursive;
+            font-size: 0.85em;
+            color: #2e1b0f;
+            margin: 15px 10px;
+            padding: 10px;
+            background: rgba(255,245,204,0.8);
+            border: 1px dashed #8b6f47;
+            transform: rotate(3deg);
+            box-shadow: 3px 3px 5px rgba(0,0,0,0.2);
+        }
+
+        .ilustracion {
+            width: 100%;
+            max-height: 150px;
+            object-fit: cover;
+            border: 2px dashed #4a3728;
+            margin: 20px 0;
+            transform: rotate(-2deg);
+            box-shadow: 3px 3px 5px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .ilustracion::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 20px;
+            height: 20px;
+            background: url('https://www.transparenttextures.com/patterns/stains.png');
+            opacity: 0.3;
+        }
+
+        .navegacion {
+            text-align: center;
+            margin-top: 20px;
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+        }
+
+        .navegacion button {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            padding: 8px 15px;
+            margin: 0 10px;
+            background: #8b6f47;
+            color: #fff;
+            border: 1px solid #4a3728;
+            cursor: pointer;
+            transform: rotate(1deg);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .navegacion button:hover {
+            background: #6f5738;
+        }
+
+        .cita {
+            font-style: italic;
+            color: #5a4636;
+        }
+
+        h3 {
+            font-family: 'Caveat', cursive;
+            font-size: 1.4em;
+            color: #2e1b0f;
+            margin: 15px 0;
+        }
+
+        ul {
+            margin: 10px 20px;
+            list-style-type: none;
+        }
+
+        ul li {
+            font-size: 0.95em;
+            color: #3c2f2f;
+            margin: 5px 0;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #8b6f47;
+        }
+
+        /* Ink Splatters for Chaos */
+        .diario-contenedor::before,
+        .diario-contenedor::after {
+            content: '';
+            position: absolute;
+            background: url('https://www.transparenttextures.com/patterns/stains.png');
+            opacity: 0.2;
+        }
+
+        .diario-contenedor::before {
+            width: 50px;
+            height: 50px;
+            top: 20px;
+            left: 20px;
+        }
+
+        .diario-contenedor::after {
+            width: 30px;
+            height: 30px;
+            bottom: 30px;
+            right: 30px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                margin: 0;
+                background: none;
+            }
+
+            .diario-contenedor {
+                width: 8.5in;
+                min-height: 11in;
+                margin: 0;
+                box-shadow: none;
+                border: none;
+                page-break-after: always;
+            }
+
+            .pagina {
+                transform: none;
+                margin: 0;
+                padding: 20px;
+                background: none;
+                border: none;
+            }
+
+            .pagina.activa {
+                display: block;
+            }
+
+            .pagina:not(.activa) {
+                display: none;
+            }
+
+            .navegacion {
+                display: none;
+            }
+
+            .ilustracion,
+            .anotacion,
+            .pagina h2,
+            .pagina blockquote {
+                transform: none;
+            }
+
+            .ilustracion {
+                max-width: 100%;
+                height: auto;
+                max-height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="diario-contenedor">
+    <section id="pagina1" class="pagina activa">
+        <h2>Entrada [Pocos días después] - La Visita de Svidrigailov</h2>
+        <p>El espectro entró en mi habitación. Svidrigailov. Se sentó, sonriendo, y el aire se volvió denso. Me habló como si fuéramos viejos conocidos unidos por un secreto oscuro. Y lo peor es que lo estamos. Admitió haber escuchado mi confesión a Sonya a través de la pared. ¡Lo sabe todo! La sangre se me heló. Luego, con una calma depravada, habló de Dunia, de su difunta esposa Marfa Petrovna, y me ofreció dinero para que mi hermana no tuviera que casarse con Lujine. Su presencia es una burla, un espejo de la vileza que temo en mí mismo. Me siento atrapado, no por la ley, sino por este hombre que ahora posee mi secreto.</p>
+        <blockquote>"Me parece que tenemos algo en común, Rodión Románovich. ¿No cree usted?"</blockquote>
+        <blockquote>"Su hermana, Avdotia Románovna, es una criatura admirable. Haría cualquier cosa por ella... o por mí."</blockquote>
+        <div class="anotacion">
+            <p>¿Me siento justificado? No. Frente a su corrupción manifiesta, mi teoría se siente como el delirio de un niño. Él es la verdadera transgresión, pero sin propósito, solo por vicio.</p>
+            <p>¿Qué me atormenta? Que mi secreto, mi carga, ahora es un arma en sus manos. La amenaza que pende sobre Dunia es insoportable.</p>
+            <p>¿Qué miedos no puedo nombrar? El miedo a que él y yo seamos, en el fondo, la misma clase de hombre.</p>
+            <p>¿Qué sensaciones me persiguen? El olor dulzón de su perfume, su sonrisa torcida, la sensación de su mirada fría evaluándome como a una pieza en su tablero de juego.</p>
+        </div>
+        <img src="svidrigailov_visit.jpg" alt="Svidrigailov sentado y sonriendo en la habitación de Raskólnikov, quien lo mira con una mezcla de horror y rabia." class="ilustracion">
+        <h3>Observaciones sobre otros:</h3>
+        <ul>
+            <li>Svidrigailov: Un monstruo calculador, mi doble oscuro. Su interés en Dunia es una amenaza directa que me obliga a actuar.</li>
+            <li>Dunia: Se ha convertido, sin saberlo, en el centro de un juego peligroso entre Svidrigailov y yo.</li>
+            <li>Sonya: Su nombre en boca de él se sintió como una profanación. Él contamina todo lo que toca.</li>
+        </ul>
+        <div class="navegacion">
+            <button onclick="cambiarPagina(1)">Siguiente Página</button>
+        </div>
+    </section>
+
+    <section id="pagina2" class="pagina">
+        <h2>Entrada [La misma tarde] - La Ruptura con Lujine</h2>
+        <p>Una confrontación inevitable. Lujine llegó a la reunión familiar con una arrogancia que envenenaba el aire. Exigió que yo no estuviera presente. ¡El descaro! Por un momento, sentí una extraña fuerza. Lo provoqué, lo desafié, y vi cómo su máscara de respetabilidad se agrietaba. Pero fue Dunia quien asestó el golpe final. Con una dignidad de acero, lo expulsó, rompiendo el compromiso para siempre. Ver su fuerza, su rechazo a ser una mercancía, me llenó de un orgullo feroz. Por primera vez en mucho tiempo, actuamos como una familia unida contra una amenaza común. Fue una victoria, pero ¿cuánto durará esta calma?</p>
+        <blockquote>"¡Si me expulsa a mí, lo expulsa a él! ¡O yo... o él! ¡Decida!" - Lujine, sellando su propio destino.</blockquote>
+        <blockquote>"¡Fuera de aquí! No te atrevas a dar un paso más en esta habitación." - Dunia, con una voz que podría cortar el acero.</blockquote>
+        <div class="anotacion">
+            <p>¿Me siento justificado? Completamente. Defender a Dunia de ese hombre vil fue un acto puro, un respiro de aire fresco en la podredumbre de mi conciencia.</p>
+            <p>¿Qué me atormenta? Que esta victoria no resuelve nada. Sigo siendo un asesino. Sigo siendo una carga. Y Svidrigailov sigue ahí fuera.</p>
+            <p>¿Qué miedos no puedo nombrar? El miedo a que mi madre y mi hermana descubran que el monstruo del que Dunia se salvó no es nada comparado conmigo.</p>
+            <p>¿Qué recuerdos me persiguen? El rostro pálido y furioso de Lujine al salir, y la mirada de alivio y gratitud de Dunia hacia mí.</p>
+        </div>
+        <img src="luzhin_breakup.jpg" alt="La familia unida (Raskólnikov, Dunia, Pulkeria, Razumikhin) frente a un Lujine enfurecido y humillado." class="ilustracion">
+        <h3>Observaciones sobre otros:</h3>
+        <ul>
+            <li>Lujine: Un necio pomposo y mezquino. Su ego fue su propia ruina. Siento desprecio, pero también un oscuro placer por su caída.</li>
+            <li>Dunia: Más fuerte de lo que jamás imaginé. No es una víctima, es una guerrera. Me inspira un temor reverencial.</li>
+            <li>Razumikhin: Su alegría y apoyo incondicional son un bálsamo, aunque su bondad resalta aún más mi propia oscuridad.</li>
+        </ul>
+        <div class="navegacion">
+            <button onclick="cambiarPagina(0)">Página Anterior</button>
+            <button onclick="cambiarPagina(2)">Siguiente Página</button>
+        </div>
+    </section>
+
+    <section id="pagina3" class="pagina">
+        <h2>Entrada [Día siguiente] - El Juego Final y el Milagro Absurdo</h2>
+        <p>Fui a ver a Porfiry. Una vez más. No sé si para terminar el juego o por una compulsión suicida. La tensión era insoportable. Él sabía. Lo leía en su sonrisa, en sus pausas, en su charla sobre la psicología del criminal. Me acorraló, hablando de una "sorpresita" que tenía para mí. Estaba a punto de quebrarme, de gritar la verdad solo para acabar con la tortura. Mi mano buscaba la puerta, mi mente se rendía... y entonces, ocurrió lo impensable. Un estruendo. La puerta se abrió de golpe y Nikolái, el pintor, entró y confesó a gritos ser el asesino. ¡Nikolái! Porfiry quedó estupefacto. Yo quedé... libre. Una libertad absurda, inmerecida, que se siente más como una broma del destino que como una salvación.</p>
+        <blockquote>"Tengo una sorpresita para usted, Rodión Románovich... está justo detrás de esa puerta. ¿No quiere verla?" - Porfiry, antes del caos.</blockquote>
+        <blockquote>"¡Yo soy el asesino! ¡Yo lo hice! ¡Pequé!" - El grito de Nikolái, que cambió todo.</blockquote>
+        <div class="anotacion">
+            <p>¿Me siento justificado? ¿Justificado de qué? ¿De mi suerte? Esto no es justicia. Es un accidente grotesco que me deja en un limbo aún peor.</p>
+            <p>¿Qué me atormenta? Que un inocente se esté culpando por mi crimen. La idea de que su fe fanática lo lleve a la horca en mi lugar es una nueva forma de tortura.</p>
+            <p>¿Qué miedos no puedo nombrar? El miedo a que esta libertad temporal solo sirva para que Porfiry juegue un juego aún más cruel y prolongado conmigo.</p>
+            <p>¿Qué pensamientos me persiguen? El eco del grito de Nikolái, la expresión de incredulidad en el rostro de Porfiry, la sensación de irrealidad que me envolvió.</p>
+        </div>
+        <img src="nikolai_confession.jpg" alt="Nikolái el pintor arrodillado y gritando su confesión, mientras Porfiry y Raskólnikov lo miran atónitos." class="ilustracion">
+        <h3>Observaciones sobre otros:</h3>
+        <ul>
+            <li>Porfiry: Derrotado, por ahora. Su juego psicológico fue destruido por un factor que no pudo prever. Pero sé que no se ha rendido.</li>
+            <li>Nikolái: Un fanático religioso, un alma simple. Su sufrimiento es ahora mi responsabilidad directa.</li>
+            <li>El "extraño": El hombre que me había llamado asesino... Siento que su papel en esto no ha terminado.</li>
+        </ul>
+        <div class="navegacion">
+            <button onclick="cambiarPagina(1)">Página Anterior</button>
+            <button onclick="cambiarPagina(3)">Siguiente Página</button>
+        </div>
+    </section>
+
+    <section id="pagina4" class="pagina">
+        <h2>Entrada [La misma noche] - El Visitante Misterioso</h2>
+        <p>Apenas había regresado a mi cuarto, aún conmocionado por la confesión de Nikolái, cuando alguien llamó a mi puerta. Era él. El hombre del abrigo, el que me había acusado en la calle. El "burgués". Entró y se disculpó. Resulta que él era la "sorpresita" de Porfiry. Había estado en el apartamento de al lado, escuchando. Vio mi crimen desde el umbral. ¡Lo vio todo! Pero después de ver la confesión de Nikolái y la reacción de Porfiry, se convenció de mi inocencia de una manera retorcida. Ahora me ve como una víctima de la injusticia. Se disculpó y se fue, dejándome con el conocimiento aterrador de que hay otro testigo, uno que ahora cree en mi inocencia. El mundo está completamente al revés.</p>
+        <blockquote>"Le pido perdón. Fui vil... Entiendo que un hombre joven, abrumado por la miseria, pueda cometer... un error."</blockquote>
+        <blockquote>"Vi cómo ese miserable de Porfiry lo trataba. ¡Es un tirano! No se preocupe, no diré nada. ¡Usted es inocente!"</blockquote>
+        <div class="anotacion">
+            <p>¿Me siento justificado? Mi culpa es un hecho. Su creencia en mi inocencia es una farsa que me repugna y, extrañamente, me protege.</p>
+            <p>¿Qué me atormenta? El conocimiento de que mi destino pende de los hilos de un loco (Nikolái), un depravado (Svidrigailov) y ahora un tonto bienintencionado.</p>
+            <p>¿Qué miedos no puedo nombrar? El miedo a que este respiro no sea más que una trampa del destino, un abismo más profundo esperando a que dé el siguiente paso.</p>
+            <p>¿Qué imágenes me persiguen? Su rostro pálido y sudoroso, la forma en que sus ojos evitaban los míos mientras confesaba haber sido el testigo.</p>
+        </div>
+        <img src="mysterious_visitor.jpg" alt="Un hombre con aspecto de artesano se inclina ante un Raskólnikov desconcertado en su habitación." class="ilustracion">
+        <h3>Observaciones sobre otros:</h3>
+        <ul>
+            <li>El extraño (el burgués): Un factor caótico. Un testigo ocular que niega la evidencia de sus propios sentidos. Es la personificación de lo absurdo.</li>
+            <li>Porfiry: Su plan fue arruinado por este hombre, cuyo testimonio ahora es inútil. ¿Qué hará ahora el juez de instrucción?</li>
+            <li>Nikolái: Su falsa confesión ha creado este desastre, convirtiendo a un testigo en un defensor.</li>
+        </ul>
+        <div class="navegacion">
+            <button onclick="cambiarPagina(2)">Página Anterior</button>
+            <button onclick="cambiarPagina(4)">Siguiente Página</button>
+        </div>
+    </section>
+
+    <section id="perfil" class="pagina">
+        <h2>Perfil Psicológico de Raskólnikov (Parte IV)</h2>
+        <p>Mi mundo ha dejado de tener sentido. La lógica, la razón por la que cometí mi crimen, ha sido aniquilada por una serie de eventos ilógicos. Me enfrento a mi propia depravación en el espejo de Svidrigailov, un hombre que conoce mi secreto y me ata a él. Al mismo tiempo, soy liberado por la falsa confesión de un fanático y la extraña lealtad de un testigo ocular. Me siento menos como un "hombre extraordinario" y más como el objeto de una broma cósmica. La presión externa de la ley (Porfiry) ha sido reemplazada por una red de dependencias y secretos con otros individuos, cada uno más impredecible que el anterior. No estoy más cerca de la redención, sino atrapado en un nuevo tipo de infierno: el de la libertad inmerecida.</p>
+        <div class="anotacion">
+            Preguntas guía para esta sección:
+            <ul>
+                <li>¿Cómo ha cambiado mi percepción de control sobre mi destino después de estos eventos?</li>
+                <li>¿Qué representa Svidrigailov para mí: una amenaza, un aliado potencial o un reflejo de mi futuro?</li>
+                <li>La confesión de Nikolái, ¿es un alivio o una carga moral aún mayor?</li>
+                <li>¿Cómo afecta mi orgullo el hecho de que mi libertad dependa de la estupidez o la locura de otros?</li>
+                <li>Después de expulsar a Lujine, ¿siento alguna responsabilidad de proteger a mi familia de mí mismo?</li>
+                <li>¿Ha disminuido mi culpa o simplemente se ha transformado en algo más complejo y menos definido?</li>
+            </ul>
+        </div>
+        <img src="mind_diagram_chaos.jpg" alt="Diagrama de la mente de Raskólnikov mostrando influencias caóticas: Svidrigailov, Porfiry, Nikolái, y el testigo." class="ilustracion">
+        <div class="navegacion">
+            <button onclick="cambiarPagina(3)">Página Anterior</button>
+        </div>
+    </section>
+</div>
+
+<script>
+    const paginas = document.querySelectorAll('.pagina');
+    let paginaActual = 0;
+
+    function mostrarPagina(indice) {
+        paginas.forEach((pagina, i) => {
+            pagina.classList.toggle('activa', i === indice);
+        });
+        window.scrollTo(0, 0);
+    }
+
+    function cambiarPagina(direccion) {
+        // Simple logic for cycling through pages
+        const totalPaginas = paginas.length;
+        if (direccion === 'siguiente') {
+            paginaActual = (paginaActual + 1) % totalPaginas;
+        } else if (direccion === 'anterior') {
+            paginaActual = (paginaActual - 1 + totalPaginas) % totalPaginas;
+        } else {
+            paginaActual = direccion;
+        }
+        mostrarPagina(paginaActual);
+    }
+
+    // Initialize the first page
+    mostrarPagina(paginaActual);
+</script>
+</body>
+</html>
